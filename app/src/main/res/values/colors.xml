@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="guard_primary">#1E88E5</color>
+    <color name="guard_danger">#E53935</color>
+    <color name="guard_safe">#43A047</color>
+    <color name="guard_background">#F5F7FA</color>
+</resources>

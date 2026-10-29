@@ -1,0 +1,9 @@
+{
+  "_comment": "Danh sách MẪU, không phải dữ liệu xác thực chính thức. CallGuard không có quyền truy cập cơ sở dữ liệu lừa đảo nào của nhà mạng/Bộ TTTT. Hãy tự cập nhật file này (hoặc dùng màn hình 'Chặn theo đầu số' trong app) theo các cảnh báo bạn tin tưởng, hoặc dựa vào báo cáo cộng đồng được tích lũy ngay trong app.",
+  "prefixes": [
+    {
+      "prefix": "+8428770",
+      "label": "VÍ DỤ: đầu số giả danh tổng đài quốc tế - hãy xoá/sửa theo thực tế của bạn"
+    }
+  ]
+}
