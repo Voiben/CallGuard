@@ -1,6 +1,8 @@
-# CallGuard
+# CallGuard — App chặn cuộc gọi lừa đảo, chặn spam Android (chan cuoc goi lua dao, chan spam, chan tin nhan rac)
 
 App Android (Kotlin + Jetpack Compose) chặn số điện thoại lừa đảo/spam và cảnh báo SMS nghi spam. Lấy cảm hứng từ ý tưởng Truecaller nhưng là **code gốc**, không giải mã ngược hay sao chép từ Truecaller thật.
+
+*Từ khoá tìm kiếm không dấu: chan cuoc goi lua dao, chan so la, chan tin nhan spam, canh bao lua dao qua dien thoai, caller id tieng viet, app chong lua dao Android.*
 
 **Tác giả:** [Voiben](https://github.com/Voiben) · **Giấy phép:** [MIT](LICENSE) — ai cũng được tự do dùng, sửa, phát hành lại, miễn ghi nhận nguồn gốc.
 
