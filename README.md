@@ -8,9 +8,17 @@ App Android (Kotlin + Jetpack Compose) chặn số điện thoại lừa đảo/
 
 Dữ liệu đầu số/từ khoá spam trong app chỉ là **mẫu tham khảo do tác giả tự biên soạn**, không phải cơ sở dữ liệu chính thức từ nhà mạng hay cơ quan nào — xem mục "Giới hạn hiện tại" bên dưới trước khi dùng thật.
 
+## Tương thích Android
+- **Cài đặt được**: Android 7.0 (API 24) trở lên.
+- **Chặn cuộc gọi tự động** (`CallScreeningService`): hoạt động từ Android 7.0, nhưng cách người dùng *chọn* CallGuard làm app mặc định khác nhau theo phiên bản:
+  - **Android 10+ (API 29+)**: dùng `RoleManager` — nút "Đặt làm app chặn cuộc gọi mặc định" trong app hiện hộp thoại hệ thống chuẩn (đã test thật, xem mục kiểm thử bên dưới).
+  - **Android 7–9 (API 24–28)**: chưa có `RoleManager`, người dùng cần tự vào Cài đặt hệ thống > Ứng dụng mặc định > Ứng dụng Điện thoại/Caller ID để chọn CallGuard thủ công (đường dẫn cụ thể tuỳ hãng máy) — **chưa được test thật trên thiết bị Android 7–9**, chỉ dựa trên tài liệu Android.
+  - Tuỳ hãng máy (MIUI, One UI, ColorOS...) có thể có thêm bước riêng — xem mục giới hạn MIUI đã test bên dưới làm ví dụ.
+- Biểu tượng app dùng adaptive icon (chỉ hỗ trợ từ Android 8.0/API 26) — trên Android 7.x, hệ thống sẽ hiện icon mặc định/chữ cái thay vì icon riêng của app (chỉ ảnh hưởng thẩm mỹ, không ảnh hưởng chức năng).
+
 ## Chức năng
 - **Danh sách chặn cục bộ**: tự thêm/xoá số, hoặc nạp sẵn từ `assets/scam_prefixes_vn.json` (file mẫu, bạn tự chỉnh).
-- **Chặn cuộc gọi tự động** qua `CallScreeningService` (Android 10+) — cần người dùng cấp quyền "Caller ID & chặn spam mặc định" trong Settings.
+- **Chặn cuộc gọi tự động** qua `CallScreeningService` (Android 7+, xem bảng tương thích phía trên).
 - **Cảnh báo SMS spam**: quét nội dung SMS đến theo từ khoá trong `assets/spam_sms_keywords_vn.json`. App **không phải ứng dụng SMS mặc định** nên chỉ cảnh báo/ghi log, không tự xoá tin khỏi hộp thư hệ thống.
 - **Báo cáo cộng đồng (local-only)**: người dùng tự báo cáo số nghi lừa đảo; một số bị báo cáo ≥ 2 lần sẽ tự escalate vào danh sách chặn. Hiện chưa có server dùng chung — mỗi máy lưu riêng.
 - **Caller ID cho số lạ**: với mọi cuộc gọi đến từ số KHÔNG có trong Danh bạ máy (Android chỉ gửi những cuộc gọi này tới CallGuard — xem mục giới hạn Danh bạ bên dưới), CallGuard hiện thông báo ngay — gắn nhãn loại spam/lừa đảo nếu số đó từng bị báo cáo trong app, kèm nút **"Chặn số này"** để chặn ngay từ thông báo mà không cần mở app.
@@ -121,3 +129,17 @@ app/src/main/java/com/nxt/callguard/
 app/src/test/java/com/nxt/callguard/data/
   CallGuardRepositoryTest.kt  # 6 test tích hợp Room+Repository thật qua Robolectric
 ```
+
+## Cập nhật tự động
+Tab **Cài đặt** có nút "Kiểm tra cập nhật" — app gọi [GitHub Releases API](https://github.com/Voiben/CallGuard/releases) của chính repo này để biết bản mới nhất; nếu có bản mới hơn, app mở sẵn trang tải. Không có server riêng, không tự âm thầm cài — luôn cần bạn xác nhận tải/cài thủ công.
+
+Để phát hành bản mới: tăng `versionCode`/`versionName` trong `app/build.gradle.kts`, build APK, tạo tag Git dạng `vX.Y.Z` (`git tag vX.Y.Z && git push origin vX.Y.Z`), rồi `gh release create vX.Y.Z <file.apk> --title "vX.Y.Z"` để đính kèm APK vào release.
+
+## Báo lỗi / đóng góp
+- Báo lỗi qua [GitHub Issues](https://github.com/Voiben/CallGuard/issues/new/choose) của repo này — có sẵn mẫu báo lỗi (issue template).
+- Mỗi khi có Issue mới, repo tự động gửi cảnh báo qua Telegram (workflow `.github/workflows/notify-telegram.yml`) để không bỏ sót báo lỗi. **Cần cấu hình 1 lần** (chủ repo tự làm trong GitHub web, không làm qua chat vì liên quan token bí mật):
+  1. Vào `Settings > Secrets and variables > Actions` của repo trên GitHub.
+  2. Thêm secret `TELEGRAM_BOT_TOKEN` = token của bot Telegram (ví dụ bot `@Ai_mep_hvac_bot` đã dùng cho Hermes Agent).
+  3. Thêm secret `TELEGRAM_CHAT_ID` = `453744944` (chat ID đã dùng trong hạ tầng Hermes hiện có).
+  - Chưa cấu hình thì workflow tự bỏ qua, không lỗi, chỉ là chưa có cảnh báo Telegram.
+- Ai cũng có thể fork/sửa/gửi Pull Request theo giấy phép MIT.

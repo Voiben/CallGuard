@@ -1,0 +1,29 @@
+name: Notify Telegram on new issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram message
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TITLE: ${{ github.event.issue.title }}
+          URL: ${{ github.event.issue.html_url }}
+          AUTHOR: ${{ github.event.issue.user.login }}
+        run: |
+          if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
+            echo "TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID chưa được cấu hình trong Secrets - bỏ qua."
+            exit 0
+          fi
+          TEXT="🐞 Issue mới trên CallGuard
+From: ${AUTHOR}
+${TITLE}
+${URL}"
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${CHAT_ID}" \
+            --data-urlencode "text=${TEXT}"
